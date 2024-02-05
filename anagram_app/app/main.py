@@ -115,7 +115,7 @@ async def get_stats_most_anagrams():
 
 #finds anagrams groups by word length
 @app.get('/stats/anagrams_word_size.json')
-async def get_stats_most_anagrams(size:int):
+async def get_anagram_groups_by_word_size(size:int):
     keys=r.keys()
     anagrams=[]
     for key in keys:
@@ -134,7 +134,7 @@ async def delete_anagrams():
 
 
 @app.get('/reinitdb.json')
-async def get_anagrams():
+async def reinitialize_db():
     r.execute_command("flushall")
     init_db()
     return status.HTTP_200_OK
