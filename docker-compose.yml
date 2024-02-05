@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  anagram_app:
+    build: ./anagram_app
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./anagram_app/:/app/
+    ports:
+      - 8001:8000
+    depends_on:
+      - redis_db
+
+  redis_db:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx_config.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - anagram_app
+
